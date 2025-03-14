@@ -1,0 +1,82 @@
+#root {
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.App {
+  width: 100%;
+}
+.main-content {
+  padding-top: 64px;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+  background: #fff; /* Fondo blanco para contraste */
+  border: 1px solid #096d8c89; /* Borde similar al contenedor de la cuenta */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  margin-bottom: 20px; /* Espacio debajo de la tarjeta */
+}
+
+.read-the-docs {
+  color: #888; /* Mantener el color gris para el texto */
+}
+
+.root-container {
+  display: flex;
+  flex-direction: column; /* Cambiar a columna para diseño vertical */
+  align-items: center; /* Centrar los elementos */
+  width: 100%;
+  max-width: 1000px; /* Mantener el ancho máximo */
+  margin: 0 auto; /* Centrar horizontalmente */
+}
+
+@media (min-width: 768px) {
+  .root-container {
+    flex-direction: row;
+    flex-direction: row; /* Cambiar a fila en pantallas más grandes */
+    justify-content: center; /* Centrar los elementos en la fila */
+  }
+}
+
+.AppBar {
+  background: linear-gradient(to bottom, #95cbf8, #03626c);
+  border-radius: 8px;
+}
+
+.App-header {
+  display: flex;
+  justify-content: center; 
+  align-items: flex-start; 
+}
+

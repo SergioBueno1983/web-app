@@ -1,0 +1,121 @@
+/* Estilos del contenedor de mensajes */
+.message-Container {
+  display: flex;/* Para que los elementos se muestren en filas */
+  flex-direction: column;/* Para que los elementos se muestren en columnas */
+  gap: 10px;
+  border-radius: 15px;
+  padding: 15px;
+  background-color: #e0d6ce; /* Fondo más oscuro */
+  overflow-y: auto; /* Habilita el scroll vertical */
+  height: calc(100% - 100px);/* Ajusta el alto del contenedor al 100% menos el alto del header */
+  max-height: 60vh;
+  list-style-type: none;
+  margin: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra más profunda */
+}
+
+/* Barra de desplazamiento */
+.message-Container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.message-Container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.message-Container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2); /* Fondo del scrollbar */
+  border-radius: 4px;
+}
+
+/* Estilos para los elementos li */
+.message-Container li {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 70%;
+  word-wrap: break-word;
+  margin-bottom: 10px;
+}
+
+.message-username {
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: #ccc; /* Letra más clara para contrastar con el fondo oscuro */
+}
+
+.my-messages {
+  background-color: #dcf8c6;
+  align-self: flex-end;
+  text-align: right;
+}
+
+.their-messages {
+  background-color: #ffffff;
+  align-self: flex-start;
+  text-align: left;
+}
+
+.message-Container p {
+  margin: 0;
+}
+
+.message-Container small {
+  font-size: 0.75rem;
+  color: #555;
+}
+
+.status-container {
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.status-icon {
+  font-size: 0.8em;
+  color: #007bff; /* Azul para leído */
+}
+
+.status-icon-gray {
+  color: #4d5561; /* Gris para enviado */
+}
+
+/* Estilo para el contenedor del input y el botón */
+.input-container {
+  display: flex;
+  gap: 10px; /* Espacio mayor entre el input y el botón */
+  align-items: center;
+  padding: 10px; /* Añadido padding extra para dar más espacio */
+  background-color: #efebe500;
+  border-radius: 15px; /* Bordes redondeados */
+}
+
+/* Barra de desplazamiento transparente */
+.input-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.input-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.input-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2); /* Fondo del scrollbar */
+  border-radius: 4px;
+}
+
+.chat-card {
+  padding: 1.5em;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(9, 109, 140, 0.5);
+  min-height: 5vh;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
