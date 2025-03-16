@@ -87,7 +87,7 @@ function App() {
                   <Route path='/' element={userLog ? (userLog.tipo === 'walker' ? <TodayTurns /> : <WalkersList clientId={userLog?.id} />) : <Contact />} /> {/* modificar service usuario */}
                   <Route path='/login' element={<LoginPage />} />
                   <Route path='/register/:typeUser' element={<Register />} />
-                  <Route path={`/account-info`} element={<AccountInfo user={userLog} />} />
+                  <Route path={`/account-info`} element={<AccountInfo/>} />
                   <Route path={`/modify-user`} element={<ModifyUser />} />
                   <Route path={`/image/single/${userLog?.id}`} element={<ProfileImageUploader userLog={userLog} />}/>
                   <Route path={`/walker-details/`} element={<WalkerDetails />}/>

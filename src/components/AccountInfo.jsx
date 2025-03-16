@@ -39,6 +39,16 @@ function Account () {
   };
 
 
+  if (!userLog) {
+    return(
+        <>
+          <CircularProgress />
+          <Typography variant="h6" style={{ marginTop: '16px' }}>
+            Cargando...
+          </Typography>
+        </>
+        )
+  }
 
   return (
     <div className="account-container">
