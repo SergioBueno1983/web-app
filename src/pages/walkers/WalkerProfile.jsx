@@ -202,7 +202,7 @@ const WalkerProfile = () => {
   };
 
   useEffect(() => {
-    const walkerImage = walkerImages.find(img => img.nombre_usuario === walker.User.nombre_usuario);
+    const walkerImage = walkerImages.find(img => img.nombre_usuario === walker.User?.nombre_usuario);
     if (walkerImage) {
       setImageUrl(walkerImage.imageSrc);
     } else {
