@@ -62,6 +62,8 @@ function ProfileImageUploader() {
                 } 
             });
               if (response.ok) {
+                console.log('Imagen response', response);
+
                 const blob = await response.blob();
                 const objectURL = URL.createObjectURL(blob);
                 setImageSrc(objectURL);
@@ -74,7 +76,7 @@ function ProfileImageUploader() {
           }
 
           if (userLog.tipo === 'client') {
-            navigate(`/user/${userLog.id}`)
+            navigate(`/account-info`)
           } else {
             navigate(`/profile/${userLog.id}`)
           }
