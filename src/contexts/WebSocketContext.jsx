@@ -11,7 +11,7 @@ export const WebSocketProvider = ({ children }) => {
   useEffect(() => {
     if (userLog) {
       // Solo conectarse cuando el usuario esté logueado
-      const newSocket = io('http://sdbdev.ddns.net', {
+      const newSocket = io('https://sdbdev.ddns.net', {
         transports: ['websocket'],
         auth:{
           userId: userLog.id
