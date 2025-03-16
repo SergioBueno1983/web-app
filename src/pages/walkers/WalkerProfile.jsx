@@ -30,6 +30,7 @@ const WalkerProfile = () => {
   const [showDeleteUser, setShowDeleteUser] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null); // Estado para la imagen seleccionada
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false); // Estado para controlar el modal
+  const [imageUrl, setImageUrl] = useState(null);
 
   const token = localStorage.getItem('userToken');
 
@@ -200,13 +201,20 @@ const WalkerProfile = () => {
     );
   };
 
+  useEffect(() => {
+    if (walkerImage) {
+      setImageUrl(walkerImage.imageSrc);
+    } else {
+      setImageUrl('url_de_no_profile_image');
+    }
+  }, [walkerImage]);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
   if (!walker) return <p>No walker found</p>;
 
   //manejo de la imagen de perfils
   const walkerImage = walkerImages.find(img => img.nombre_usuario === walker.User.nombre_usuario);
-  const imageUrl = walkerImage ? walkerImage.imageSrc : 'url_de_no_profile_image'; // URL de imagen por defecto
   
 
   return (
