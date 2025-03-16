@@ -5,7 +5,7 @@ import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Link } from 'react-router-dom';
 import DeleteUser from '../pages/users/DeleteUser';
-import { Button, IconButton, MenuItem, Tooltip } from '@mui/material';
+import { Button, CircularProgress, IconButton, MenuItem, Tooltip, Typography } from '@mui/material';
 import { useUserImageContext } from '../contexts/UserImageContext';
 import noImage from '../assets/no_image.png'
 import { useUser } from '../contexts/UserLogContext'; 
