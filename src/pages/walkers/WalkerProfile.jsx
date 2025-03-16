@@ -202,19 +202,19 @@ const WalkerProfile = () => {
   };
 
   useEffect(() => {
+    const walkerImage = walkerImages.find(img => img.nombre_usuario === walker.User.nombre_usuario);
     if (walkerImage) {
       setImageUrl(walkerImage.imageSrc);
     } else {
       setImageUrl('url_de_no_profile_image');
     }
-  }, [walkerImage]);
+  }, [walkerImages, walker]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
   if (!walker) return <p>No walker found</p>;
 
-  //manejo de la imagen de perfils
-  const walkerImage = walkerImages.find(img => img.nombre_usuario === walker.User.nombre_usuario);
+  
   
 
   return (
