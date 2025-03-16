@@ -5,6 +5,7 @@ import { useUserImageContext } from '../contexts/UserImageContext'; // Importa e
 import { Save } from '@mui/icons-material';
 import { IconButton, Tooltip } from '@mui/material';
 import { useUser } from '../contexts/UserLogContext';
+import { useWalkersImageContext } from '../contexts/WalkersImageContext';
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -15,6 +16,8 @@ function ProfileImageUploader() {
   const fileInputRef = useRef(null)
   const { userLog } = useUser()
   const token = localStorage.getItem('userToken');
+  const { refreshWalkerImages } = useWalkersImageContext()
+
   
 
   useEffect(() => {
@@ -67,6 +70,7 @@ function ProfileImageUploader() {
                 const blob = await response.blob();
                 const objectURL = URL.createObjectURL(blob);
                 setImageSrc(objectURL);
+                refreshWalkerImages()
               } else {
                 console.error('Error al obtener la imagen del usuario:', response.statusText);
               }

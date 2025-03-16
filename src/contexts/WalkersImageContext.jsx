@@ -63,6 +63,50 @@ export const WalkersImageContextProvider = ({ children }) => {
     };
   }, [userLog]);
 
+  const refreshWalkerImages = async () => {
+    const getWalkerImages = async () => {
+      try {
+        const token = localStorage.getItem('userToken');
+
+        if (!userLog || !token) {
+          return;
+        }
+        const response = await fetch(`${baseUrl}/image/walkers`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (response.ok) {
+          const walkers = await response.json();
+          const images = await Promise.all(walkers.map(async (walker) => {
+            const imageResponse = await fetch(`${baseUrl}/image/single/${walker.nombre_usuario}`, {
+              headers: { 'Authorization': `Bearer ${token}` }
+            });
+            
+            if (imageResponse.ok) {
+              const blob = await imageResponse.blob();
+              const objectURL = URL.createObjectURL(blob);
+              return { ...walker, imageSrc: objectURL };
+            } else {
+              console.error('Error al obtener la imagen del paseador:', imageResponse.statusText);
+              return { ...walker, imageSrc: null };
+            }
+          }));
+          setWalkerImages(images);
+        } else {
+          console.error('Error al obtener los datos de los paseadores:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error al obtener los datos de los paseadores:', error);
+      }
+    };
+
+    if (userLog) {
+      getWalkerImages();
+    }
+  }
+
   const getWalkerTurns = async (walkerId) => {
     const token = localStorage.getItem('userToken');
 
@@ -89,7 +133,7 @@ export const WalkersImageContextProvider = ({ children }) => {
   };
 
   return (
-    <WalkersImageContext.Provider value={{ walkerImages, getWalkerTurns, setWalkerImages }}>
+    <WalkersImageContext.Provider value={{ walkerImages, getWalkerTurns, setWalkerImages, refreshWalkerImages }}>
       {children}
     </WalkersImageContext.Provider>
   );
