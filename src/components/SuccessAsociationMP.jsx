@@ -30,8 +30,11 @@ const SuccessAsociationMP = () => {
         body: JSON.stringify({
           code: code,
         }),
+        
       });
 
+      console.log('response', response)
+      console.log('code', code)
       if (response.ok) {
         // Actualiza campo mercadopago en userLog
         setUserLog((prevUserLog) => ({
