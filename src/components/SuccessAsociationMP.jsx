@@ -11,15 +11,16 @@ const SuccessAsociationMP = () => {
   const { userLog, setUserLog } = useUser();
   const token = localStorage.getItem('userToken');
 
-  
   useEffect(() => {
-    // Si no hay token, redirigir al inicio 
-    if (!token) {
+    // Si no hay token o usuario logueado, redirigir al inicio
+    if (!token || !userLog) {
       navigate('/');
-    } 
-  }, [token, navigate]);
+    }
+  }, [token, userLog, navigate]);
 
   const successAsociation = async (code) => {
+    if (!userLog) return; // Evita ejecutar la función si `userLog` es null
+
     try {
       const response = await fetch(`${baseUrl}/walkers/mercadopago/${userLog.id}`, {
         method: 'PUT',
@@ -27,29 +28,23 @@ const SuccessAsociationMP = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          code: code,
-        }),
-        
+        body: JSON.stringify({ code }),
       });
 
-      console.log('response', response)
-      console.log('code', code)
       if (response.ok) {
         // Actualiza campo mercadopago en userLog
         setUserLog((prevUserLog) => ({
           ...prevUserLog,
-          code: code,
+          mercadopago_code: code, // Asegúrate de usar el campo correcto en tu API
         }));
 
         setLoading(false);
         navigate(`/profile/${userLog.id}`);
       } else {
-        console.error('Error al actualizar mercadopago');
+        console.error('Error al actualizar MercadoPago');
       }
     } catch (error) {
       console.error('Error en la solicitud:', error);
-
     }
   };
 
@@ -57,15 +52,15 @@ const SuccessAsociationMP = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
 
-    console.log('code:', code)
-
-    if (code === null) {
-      // navigate('/'); // No hay parámetro `code`, redirige al inicio
-      console.log('no hay code en la url')
-    } else {
-      successAsociation(code); // Hay parámetro `code`, realiza la asociación
+    if (!code) {
+      console.log('No hay code en la URL');
+      return;
     }
-  }, []);
+
+    if (userLog) {
+      successAsociation(code);
+    }
+  }, [userLog]); // Se ejecuta cuando `userLog` está disponible
 
   return (
     <Container
