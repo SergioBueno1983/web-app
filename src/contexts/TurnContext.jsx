@@ -56,7 +56,8 @@ export const WalkerTurnsProvider = ({ children }) => {
   return (
     <WalkerTurnsContext.Provider value={{ 
       turns, 
-      setTurns
+      setTurns,
+      getWalkerTurns
     }}>
       {children}
     </WalkerTurnsContext.Provider>

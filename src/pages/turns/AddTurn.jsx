@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Button, Grid, Checkbox, FormControlLabel, FormHelperText, Modal, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import SelectNeighborhood from '../../components/SelectZone';
+import { useWalkerTurnsContext } from '../../contexts/TurnContext';
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -20,6 +21,7 @@ function AddTurnForm({ userLog }) {
   const [openNeighborhoodModal, setOpenNeighborhoodModal] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem('userToken');
+  const { getWalkerTurns } = useWalkerTurnsContext();
 
 
 
@@ -115,9 +117,9 @@ function AddTurnForm({ userLog }) {
       });
 
       if (response.ok) {
-        const responseData = await response.json();
         console.log('Turno agregado correctamente');
         setMensaje('Turno agregado correctamente');
+        getWalkerTurns();
         // Limpiar el formulario después de enviar los datos
         setDias([]);
         setHoraInicio('');

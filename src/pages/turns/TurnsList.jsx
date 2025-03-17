@@ -9,15 +9,15 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import {Tooltip } from '@mui/material';
+import { useWalkerTurnsContext } from '../../contexts/TurnContext';
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-function TurnsList({ walkerId }) {
-  const [turns, setTurns] = useState([]);
-  const [loading, setLoading] = useState(true);
+function TurnsList({ }) {
   const [error, setError] = useState(null);
   const navigate= useNavigate()
   const token = localStorage.getItem('userToken');
+  const { getWalkerTurns, turns } = useWalkerTurnsContext();
 
   useEffect(() => {
     // Si no hay token, redirigir al inicio
@@ -26,34 +26,7 @@ function TurnsList({ walkerId }) {
     }
   }, [token, navigate]);
 
-  useEffect(() => {
-    const fetchTurns = async () => {
-      try {
-        if(!token){
-          return navigate('/')
-
-        }
-        const response = await fetch(`${baseUrl}/turns/walker/${walkerId}`, { 
-          headers: { 
-            'Authorization': `Bearer ${token}` 
-          } 
-      });
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setTurns(data.body);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (walkerId) {
-      fetchTurns();
-    }
-  }, [walkerId]);
+  useEffect(() => {}, [turns]);
 
   const handleDeleteTurn = async (turnId) => {
     // Lógica para eliminar el turno con el ID proporcionado
@@ -73,10 +46,10 @@ function TurnsList({ walkerId }) {
         throw new Error('Error al eliminar el turno');
       }
       // Actualizar la lista de turnos después de la eliminación
-      const updatedTurns = turns.filter((turn) => turn.id !== turnId);
-      setTurns(updatedTurns);
+      getWalkerTurns();
     } catch (error) {
       console.error('Error al eliminar el turno:', error.message);
+      setError(error.message);
     }
   };
 
@@ -84,8 +57,6 @@ function TurnsList({ walkerId }) {
     navigate('/agregar-turno')
   };
   
-
-  if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (
