@@ -10,16 +10,16 @@ const SuccessAsociationMP = () => {
   const navigate = useNavigate();
   const { userLog, setUserLog } = useUser();
   const token = localStorage.getItem('userToken');
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
-    // Si no hay token o usuario logueado, redirigir al inicio
-    if (!token || !userLog) {
+    if (!token) {
       navigate('/');
     }
-  }, [token, userLog, navigate]);
+  }, [token, navigate]);
 
   const successAsociation = async (code) => {
-    if (!userLog) return; // Evita ejecutar la función si `userLog` es null
+    if (!userLog) return; // Si aún no hay userLog, salir
 
     try {
       const response = await fetch(`${baseUrl}/walkers/mercadopago/${userLog.id}`, {
@@ -32,10 +32,9 @@ const SuccessAsociationMP = () => {
       });
 
       if (response.ok) {
-        // Actualiza campo mercadopago en userLog
         setUserLog((prevUserLog) => ({
           ...prevUserLog,
-          mercadopago_code: code, // Asegúrate de usar el campo correcto en tu API
+          mercadopago_code: code,
         }));
 
         setLoading(false);
@@ -54,13 +53,23 @@ const SuccessAsociationMP = () => {
 
     if (!code) {
       console.log('No hay code en la URL');
+      navigate('/');
       return;
     }
 
     if (userLog) {
       successAsociation(code);
+    } else if (retryCount < 5) {
+      // Espera a que userLog esté disponible antes de reintentar
+      const timeout = setTimeout(() => {
+        setRetryCount(retryCount + 1);
+      }, 1000);
+      return () => clearTimeout(timeout);
+    } else {
+      console.log('No se pudo obtener userLog, redirigiendo...');
+      navigate('/');
     }
-  }, [userLog]); // Se ejecuta cuando `userLog` está disponible
+  }, [userLog, retryCount]); // Se reintenta hasta 5 veces
 
   return (
     <Container
