@@ -166,7 +166,7 @@ const WalkerProfile = () => {
     //actualizo al lista de fotos del walker
     const updatedWalker = walker;
     updatedWalker.fotos = updatedWalker.fotos.filter(foto => foto.url !== selectedImage);
-    setWalker(updatedWalker);
+    setImages(updatedWalker.fotos);
 
     setIsDeleteDialogOpen(false); // Cierra el modal
     } catch (error) {
