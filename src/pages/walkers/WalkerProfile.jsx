@@ -144,9 +144,7 @@ const WalkerProfile = () => {
   };
 
   const handleConfirmDelete = async () => {
-    try {
-      console.log(`Eliminar imagen con URL: ${selectedImage}`);
-    
+    try {    
     // Eliminar la imagen seleccionada llamada a la api
     const response = await fetch(`${baseUrl}/image/${userLog.id}`, {
       method: 'DELETE',
@@ -157,8 +155,6 @@ const WalkerProfile = () => {
       body: JSON.stringify({ imageUrl: selectedImage }),
     });
     const data = await response.json();
-    console.log('data', data);
-
     if (!response.ok) {
       throw new Error('Error al eliminar la imagen');
     }
@@ -166,7 +162,7 @@ const WalkerProfile = () => {
     //actualizo al lista de fotos del walker
     const updatedWalker = walker;
     updatedWalker.fotos = updatedWalker.fotos.filter(foto => foto.url !== selectedImage);
-    setImages(updatedWalker.fotos);
+    setWalker(updatedWalker);
 
     setIsDeleteDialogOpen(false); // Cierra el modal
     } catch (error) {
