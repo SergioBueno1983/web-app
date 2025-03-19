@@ -95,7 +95,7 @@ const WalkerProfile = () => {
     };
 
     fetchWalker();
-  }, [walkerId]);
+  }, [walkerId, images]);
 
   const formatFechaNacimiento = (fecha) => {
     const date = new Date(fecha);
