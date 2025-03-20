@@ -60,7 +60,8 @@ function ProfileImageUploader() {
             if (userData) {
               const user = JSON.parse(userData);
               const response = await fetch(`${baseUrl}/image/single/${user.nombre_usuario}`, { 
-                headers: { 
+                method: 'POST',
+                headers: {
                   'Authorization': `Bearer ${token}` 
                 } 
             });
