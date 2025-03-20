@@ -42,6 +42,9 @@ const WalkerProfile = () => {
   }, [token, navigate]);
   
   useEffect(() => {
+  }, [images]);
+  
+  useEffect(() => {
     const fetchWalker = async () => {
       try {
 
@@ -95,7 +98,7 @@ const WalkerProfile = () => {
     };
 
     fetchWalker();
-  }, [walkerId, images]);
+  }, [walkerId]);
 
   const formatFechaNacimiento = (fecha) => {
     const date = new Date(fecha);
