@@ -52,7 +52,6 @@ function ProfileImageUploader() {
       });
   
       if (response.ok) { //si se cargo bien
-        console.log('Imagen subida con éxito');
 
         //traigo la imagen que recien subi
           try {
@@ -66,8 +65,6 @@ function ProfileImageUploader() {
                 } 
             });
               if (response.ok) {
-                console.log('Imagen response', response);
-
                 const blob = await response.blob();
                 const objectURL = URL.createObjectURL(blob);
                 setImageSrc(objectURL);

@@ -33,8 +33,6 @@ function ServiceHistory({}) {
 
   const handleReview = async (service) => {
     const serviceId = service.id;
-    console.log('urlBase', baseUrl)
-
 
     if (userLog.tipo === 'walker') { //si la reseña la escribe un paseador
       navigate(`/add-review/${service.ClientId}`, { state: { serviceId } }) //el receiver es el cliente del servicio

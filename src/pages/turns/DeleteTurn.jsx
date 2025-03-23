@@ -31,7 +31,6 @@ function DeleteTurn({ turnId }) {
 
       if (response.ok) {
         const responseData = await response.json();
-        console.log('Turno eliminado correctamente');
         setMensaje(responseData.message);
         // Redirige al usuario a la página de inicio de turnos
         alert('Turno eliminado correctamente');
@@ -48,7 +47,6 @@ function DeleteTurn({ turnId }) {
   };
 
   const onCancel = () => {
-    console.log("Cancelar eliminar turno");
   };
 
   return (

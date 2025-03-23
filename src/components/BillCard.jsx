@@ -75,7 +75,6 @@ function BillCard() {
       }
 
       const data = await response.json();
-      console.log('data',data);
       return data.body;
     } catch (error) {
       console.error('Failed to fetch walker data:', error);
@@ -96,8 +95,7 @@ function BillCard() {
         })
       });   
       const data = await response.json();
-      
-      console.log('data',data);
+    
       
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -116,7 +114,6 @@ function BillCard() {
         const walker = await verificarMercadoPago();
         setMercadopagoDisponible(walker.mercadopago); // Actualizar el estado
         setEfectivoDisponible(walker.efectivo); // Actualizar el estado
-        console.log('walker',walker);
 
         if (walker.mercadopago) {
           fetchPaymentData();

@@ -117,7 +117,6 @@ function AddTurnForm({ userLog }) {
       });
 
       if (response.ok) {
-        console.log('Turno agregado correctamente');
         setMensaje('Turno agregado correctamente');
         getWalkerTurns();
         // Limpiar el formulario después de enviar los datos

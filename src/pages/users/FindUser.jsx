@@ -34,7 +34,6 @@ function UserDetails({ userId }) {
         const userData = await response.json();
         setUserData(userData);
         setLoading(false);
-        console.log(JSON.stringify(userData))
       } catch (error) {
         setError(error.message);
         setLoading(false);

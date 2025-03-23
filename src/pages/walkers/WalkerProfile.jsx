@@ -24,9 +24,9 @@ const WalkerProfile = () => {
   const [error, setError] = useState(null);
   const [images, setImages] = useState([]);
   const [turns, setTurns] = useState([]);
-  const { walkerImages } = useWalkersImageContext();
+  const { walkerImages, refreshWalkerImages } = useWalkersImageContext();
   const { userLog } = useUser();
-  const { imageSrc} = useUserImageContext();
+  const { imageSrc } = useUserImageContext();
   const [showDeleteUser, setShowDeleteUser] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null); // Estado para la imagen seleccionada
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false); // Estado para controlar el modal
@@ -76,7 +76,7 @@ const WalkerProfile = () => {
               headers: { 
                 'Authorization': `Bearer ${token}` 
               } 
-          });
+            });
             
             if (imageResponse.ok) {
               const blob = await imageResponse.blob();
@@ -162,10 +162,13 @@ const WalkerProfile = () => {
       throw new Error('Error al eliminar la imagen');
     }
 
+    
     //actualizo al lista de fotos del walker
     const updatedWalker = walker;
+    const selectedIndex = updatedWalker.fotos.findIndex(foto => foto.url === selectedImage);
     updatedWalker.fotos = updatedWalker.fotos.filter(foto => foto.url !== selectedImage);
     setWalker(updatedWalker);
+    setImages(prevImages => prevImages.filter((_, index) => index !== selectedIndex));
 
     setIsDeleteDialogOpen(false); // Cierra el modal
     } catch (error) {
@@ -239,7 +242,7 @@ const WalkerProfile = () => {
         </Grid>}
         <Grid container spacing={2} alignItems="center">
           <Grid item>
-            <Avatar alt={walker.User.nombre_usuario} src={imageUrl} sx={{ width: 100, height: 100 }} />
+            <Avatar alt={walker.User.nombre_usuario} src={userLog.tipo === 'walker' ? imageSrc : imageUrl} sx={{ width: 100, height: 100 }} />
           </Grid>
           {/* si el usuario logueado es el propietario del perfil, muestra el botón de editar la foto del perfil */}
           { userLog.id == walker.id && 

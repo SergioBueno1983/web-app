@@ -34,8 +34,6 @@ function ModifyUser() {
   // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí puedes enviar los datos a un servidor, almacenarlos en localStorage, etc.
-    // console.log(JSON.stringify(userData))
     try {
 
       let response;
@@ -62,7 +60,6 @@ function ModifyUser() {
 
       if (response.ok) {
         const responseData = await response.json()
-        console.log('Cliente modificado correctamente');
         setMensaje(responseData.message)
         localStorage.setItem('userData', JSON.stringify(userData))
         setUserLog(userData)

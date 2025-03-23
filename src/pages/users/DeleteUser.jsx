@@ -43,7 +43,6 @@ function DeleteUser({onCancel}) {
       }
       if (response.ok) {
         const responseData = await response.json()
-        console.log('Cuenta eliminada correctamente');
         setMensaje(responseData.message)
         //Seteo en null el usuario logeado
         setUserLog(null);

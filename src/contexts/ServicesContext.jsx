@@ -84,7 +84,6 @@ export const ConfirmedServicesProvider = ({ children }) => {
 
 
       // Obtengo solo los servicios concretados
-      console.log('data.body', data.body);
       const serviciosConcretados = data.body.filter(service => {
         // Convertimos la fecha del servicio y ajustamos la diferencia horaria
         const serviceDate = new Date(service.fecha);

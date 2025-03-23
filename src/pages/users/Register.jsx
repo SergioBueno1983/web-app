@@ -92,7 +92,6 @@ function Register() {
     });
 
     if (!valid) {
-      console.log('Errores en el formulario');
       return;
     }
 

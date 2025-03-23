@@ -100,7 +100,6 @@ function WalkersList() {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        console.log('data.body en turn', data);
         //filtra los paseadores que no tienen turnos
         const filteredWalkers = data.body.filter((walker) => walker.Turns.length > 0);
         setWalkers(filteredWalkers);
