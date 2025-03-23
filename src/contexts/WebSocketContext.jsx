@@ -2,6 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { useUser } from './UserLogContext'; // Para verificar si el usuario está logueado
 
+const baseUrl = import.meta.env.VITE_API_BASE_URL_SOCKET;
+
 const WebSocketContext = createContext(null);
 
 export const WebSocketProvider = ({ children }) => {
@@ -11,7 +13,7 @@ export const WebSocketProvider = ({ children }) => {
   useEffect(() => {
     if (userLog) {
       // Solo conectarse cuando el usuario esté logueado
-      const newSocket = io('https://sdbdev.ddns.net', {
+      const newSocket = io(baseUrl, {
         transports: ['websocket'],
         auth:{
           userId: userLog.id
