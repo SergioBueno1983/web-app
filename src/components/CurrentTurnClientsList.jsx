@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Table,TableBody,TableCell,TableContainer, TableHead,TableRow, Paper, Button, IconButton } from '@mui/material'
+import { Table,TableBody,TableCell,TableContainer, TableHead,TableRow, Paper, Button, IconButton, Modal, Box, Typography } from '@mui/material'
 import { CheckCircle, RadioButtonUnchecked } from '@mui/icons-material'
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -14,6 +14,8 @@ export default function CurrentTurnClientsList() {
   const token = localStorage.getItem('userToken');
   const dateNow = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   const navigate = useNavigate()
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  const [selectedServiceId, setSelectedServiceId] = useState(null);
 
   useEffect(() => {
     // Si no hay token, redirigir al inicio
@@ -46,6 +48,7 @@ export default function CurrentTurnClientsList() {
   
     return `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
+  
   const toggleServiceStatus = async (id, comenzado) => {
     if (!comenzado) { // cambiar el estado a comenzado
       try {
@@ -72,27 +75,66 @@ export default function CurrentTurnClientsList() {
       }
     } else { //cambiar el estado a finalizado
       try {
-        const response = await fetch(`${baseUrl}/services/finished/${id}`, {
-          method: 'PUT',
+        //traigo el servicio de la bdd para asegurarme de tener la ultima versión
+        const billResponse = await fetch(`${baseUrl}/bills/services/${id}`, {
+          method: 'GET',
           headers: { 
             'Authorization': `Bearer ${token}` 
           }
         })
 
-        if (!response.ok) {
-          throw new Error("Error al actualizar el estado del servicio");
+        if (!billResponse.ok) {
+          throw new Error("Error al obtener la factura");
         }
 
-        // Actualiza el estado localmente (quito el servicio de la lista)
-        setServices((prevServices) =>
-          prevServices.filter((service) => service.id !== id)
-        );
-
+        const data = await billResponse.json();
+        if (!data.body.pagado && !data.body.pendiente) { // si no se ha elegido metodo de pago
+          alert("El cliente aun no ha elegido un metodo de pago");
+          return;
+        } else if (data.body.pendiente) { // si el pago es efectivo
+          setSelectedServiceId(id);
+          // abro un modal de confirmacion
+          handleOpenConfirmModal();
+        } else { //si ya esta pagado online
+          setSelectedServiceId(id);
+          await confirmFinishService();
+        }
       } catch (error) {
         console.log(error)
       }
     }
   }
+
+
+
+  const confirmFinishService = async () => {
+    if (!selectedServiceId) return; // Evitar llamadas sin un ID válido
+    try {
+       //cambio el estado
+       const response = await fetch(`${baseUrl}/services/finished/${selectedServiceId}`, {
+        method: 'PUT',
+        headers: { 
+          'Authorization': `Bearer ${token}` 
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error("Error al actualizar el estado del servicio");
+      }
+
+      // Actualiza el estado localmente (quito el servicio de la lista)
+      setServices((prevServices) =>
+        prevServices.filter((service) => service.id !== selectedServiceId)
+      );
+
+      // cierro el modal si esta abierto
+      handleCloseConfirmModal();
+      setSelectedServiceId(null);
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const isWithinTurnHours = () => {
     
     const horaFinConMargen = addMinutesToTime(turn.hora_fin, 60);
@@ -122,6 +164,9 @@ export default function CurrentTurnClientsList() {
     }
     fetchData();
   }, [turn]);
+
+  const handleOpenConfirmModal = () => setOpenConfirmModal(true);
+  const handleCloseConfirmModal = () => {setOpenConfirmModal(false); setSelectedServiceId(null);};
   
 
   if (loading) return <p>Loading...</p>;
@@ -173,6 +218,24 @@ export default function CurrentTurnClientsList() {
         </Table>
       </TableContainer>) :
       (<p>No hay servicios para este turno</p>)}
+      <Modal open={openConfirmModal} onClose={handleCloseConfirmModal}>
+        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'background.paper', boxShadow: 24, p: 4, width: '80%', maxWidth: 600 }}>
+          <Typography variant="h5" component="h2" style={{ marginBottom: '20px' }}>
+            Finalizar Servicio.
+          </Typography>
+          <Typography variant="body1" style={{ marginBottom: '20px' }}>
+            El usuario selecciono el metodo de pago efectivo. Al confirmar la finalizacion usted acepta que ya recibio el pago.
+          </Typography>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Button onClick={confirmFinishService} variant="contained" color="secondary" style={{ marginTop: '20px' }}>
+            Confirmar
+          </Button>
+          <Button onClick={handleCloseConfirmModal} variant="contained" color="secondary" style={{ marginTop: '20px' }}>
+            Cancelar
+          </Button>
+          </div>
+        </Box>
+      </Modal>
     </div>
   )
 }

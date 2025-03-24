@@ -133,7 +133,16 @@ function BillCard() {
           Factura ID: {billToPay.id}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          <strong>Fecha:</strong> {fecha}
+          <strong>Fecha de Servicio:</strong> {billToPay.Service.fecha}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          <strong>Paseador:</strong> {billToPay.Service.Turn.Walker.User.nombre_usuario}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          <strong>Cantidad de mascotas:</strong> {billToPay.Service.cantidad_mascotas}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          <strong>Direccion:</strong> {billToPay.Service.direccionPickUp}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           <strong>Monto: $</strong> {billToPay.monto}

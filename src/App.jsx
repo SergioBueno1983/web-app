@@ -49,6 +49,7 @@ import ChatComponent from './components/ChatComponent';
 import ReviewList from './pages/reviews/ReviewList';
 import SelectZone from './components/SelectZone';
 import AddPet from './pages/clients/AddPet';
+import BillHistory from './pages/payment/BillHistory';
 
 
 function App() {
@@ -75,13 +76,13 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
     {globalStyles}
-      <Box sx={{ minHeight: '100vh', minWidth: '100vh' , paddingTop: '64px'}}>
+      <Box sx={{ paddingTop:'50px', minHeight: '50vh', minWidth: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', margin: '0 auto' }}>
         <Container className='root-container'>
           <div className='App'>
             <UserImageContextProvider>
             <ResponsiveAppBar loggedInUser={userLog} onLogout={handleLogout} />
               <header className='App-header'>
-              <Box sx={{ minHeight: '100vh', paddingTop: '64px' }}>
+              <Box sx={{ minHeight: '50vh', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', margin: '0 auto' }}>
               <Container>
                 <Routes>
                   <Route path='/' element={userLog ? (userLog.tipo === 'walker' ? <TodayTurns /> : <WalkersList clientId={userLog?.id} />) : <Contact />} /> {/* modificar service usuario */}
@@ -109,6 +110,7 @@ function App() {
                   <Route path={`/reviews/:userId`} element={<ReviewList />}/>  
                   <Route path={`/select-zone`} element={<SelectZone />}/>  
                   <Route path={`/add-pet`} element={<AddPet />}/>
+                  <Route path={`/bill-history`} element={<BillHistory />}/>
 
                   <Route path='/success' element={<Success/>} />
                   <Route path='/failure' element={<Failure/>} />

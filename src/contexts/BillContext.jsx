@@ -10,6 +10,7 @@ export const useUnpaidBillsContext = () => useContext(UnpaidBillsContext);
 
 export const UnpaidBillsProvider = ({ children }) => {
   const [unpaidBills, setUnpaidBills] = useState([]);
+  const [oldBills, setOldBills] = useState([]);
   const { userLog } = useUser();
   const token = localStorage.getItem('userToken');
   const navigate = useNavigate();
@@ -31,6 +32,8 @@ export const UnpaidBillsProvider = ({ children }) => {
       const data = await response.json();
       const unpaidBills = data.body.filter(bill => !bill.pagado);
       setUnpaidBills(unpaidBills); // Guardar las facturas impagas en el estado
+      const oldBills = data.body.filter(bill => bill.pagado);
+      setOldBills(oldBills); // Guardar las facturas pagadas en el estado
     } catch (error) {
       console.error('Error fetching unpaid bills:', error);
     }};
@@ -46,7 +49,8 @@ export const UnpaidBillsProvider = ({ children }) => {
   return (
     <UnpaidBillsContext.Provider value={{ 
       unpaidBills, 
-      setUnpaidBills
+      setUnpaidBills,
+      oldBills
     }}>
       {children}
     </UnpaidBillsContext.Provider>

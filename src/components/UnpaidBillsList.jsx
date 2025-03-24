@@ -28,34 +28,35 @@ function UnpaidBillsList() {
   };
 
   return (
-    <div style={{ backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '8px' }}>
-      <Typography variant="h5" gutterBottom>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'row'}}>
+      <Typography variant="h3" gutterBottom>
         Facturas
       </Typography>
-      <List>
-        {unpaidBills.map((bill) => {
-            const today =new Date(bill.fecha);
-
-            today.setHours(today.getHours() +3);
-            const fecha= today.toISOString().split('T')[0];
-          return(
-          <React.Fragment key={bill.id}>
-            <ButtonBase onClick={() => handleBillClick(bill)}>
-              {/* Mostrar el ID de la factura y la fecha en la lista */}
-              <ListItemText
-                primary={`Factura ID: ${bill.id}`}
-                secondary={`Fecha: ${fecha} - Monto: $${bill.monto}`}
-              />              
-            </ButtonBase>
-            {bill.pendiente ? (<ListItemText
-                primary={`Pago Pendiente`}
-              />): <ListItemText
-              primary={`Impaga`}
-            />}
-            <Divider /> {/* Separador entre elementos de la lista */}
-          </React.Fragment>
-        )})}
-      </List>
+      <button onClick={() => navigate('/bill-history')}>Ver Historial</button>
+      </div>
+      {unpaidBills.length > 0 ? <div style={{ backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '8px' }}>
+        <List>
+          {unpaidBills.map((bill) => {
+            return(
+            <React.Fragment key={bill.id}>
+              <ButtonBase onClick={() => handleBillClick(bill)}>
+                {/* Mostrar el ID de la factura y la fecha en la lista */}
+                <ListItemText
+                  primary={`Factura ID: ${bill.id}`}
+                  secondary={`Fecha servicio: ${bill.Service.fecha} - Monto: $${bill.monto}`}
+                />              
+              </ButtonBase>
+              {bill.pendiente ? (<ListItemText
+                  primary={`Pago Pendiente`}
+                />): <ListItemText
+                primary={`Impaga`}
+              />}
+              <Divider /> {/* Separador entre elementos de la lista */}
+            </React.Fragment>
+          )})}
+        </List>
+      </div> : <p>No hay facturas pendientes de pago.</p>}
     </div>
   );
 }
