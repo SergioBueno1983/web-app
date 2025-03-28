@@ -40,10 +40,11 @@ const PaymentMethodsConfig = () => {
           setMercadoPago(data.body.mercadopago);
           setRefresh_token(data.body.refresh_token || '')
         } else {
-          console.error("Error fetching walker data:", await response.text());
+          const errorText = await response.text();
+          setError(`Error: ${errorText}`);
         }
       } catch (error) {
-        console.error('Error fetching walker data:', error);
+        setError('Error al obtener los datos del paseador, intentalo mas tarde');
       }
     };
 
@@ -91,7 +92,6 @@ const PaymentMethodsConfig = () => {
         setError(`Error: ${errorText}`);
       }
     } catch (error) {
-      console.error('Error en la solicitud:', error);
       setError('Ocurrió un error al intentar guardar la configuración.');
     }
   };

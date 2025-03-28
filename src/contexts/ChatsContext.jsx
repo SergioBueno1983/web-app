@@ -122,81 +122,84 @@ export const ChatsProvider = ({ children }) => {
 useEffect(() => {
   // Definimos `handleNewMessage` dentro del useEffect para que siempre acceda a los valores más recientes de usersChats y unreadChats
   const handleNewMessage = async (newMessage) => {
-    if(!token) {
-      return navigate('/');
-    }
-    if (newMessage.senderId === userLog.id) return; // No se procesa el mensaje de mi mismo
+    try {
+      if(!token) {
+        return navigate('/');
+      }
+      if (newMessage.senderId === userLog.id) return; // No se procesa el mensaje de mi mismo
 
-    // me traigo la info del mensaje nuevo desde la api para tener los datos completos
-    const response = await fetch(`${baseUrl}/messages/single/${newMessage.id}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-    const data = await response.json();
-    const fullMessage = data.body;
-    
-
-    // chequeo si el senderId que viene en el mensaje, ya existe en el estado
-    const existingChat = usersChats.find((chat) => {
-      return chat.id === newMessage.senderId;
-    });
-
-    let existingUnreadChat;
-
-    if (unreadChats.size > 0) {
-      // chequeo si el senderId ya está en el estado de unreadChats
-       existingUnreadChat = unreadChats.has(newMessage.senderId);
-    }
-
-    // si no existe el chat, busco el cliente con el senderId que me llega con el mensaje y lo agrego al estado
-    if (!existingChat) {
-      let response;
-      let user;
-
-      // hago un fetch para obtener el usuario que envia con el senderId
-      response = await fetch(`${baseUrl}/clients/body/${newMessage.senderId}`, {
+      // me traigo la info del mensaje nuevo desde la api para tener los datos completos
+      const response = await fetch(`${baseUrl}/messages/single/${newMessage.id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
-      user = await response.json();
+      const data = await response.json();
+      const fullMessage = data.body;
       
-      // si no es cliente, busco si es paseador
-      if (!user.body) {
-        response = await fetch(`${baseUrl}/walkers/${newMessage.senderId}`, {
+
+      // chequeo si el senderId que viene en el mensaje, ya existe en el estado
+      const existingChat = usersChats.find((chat) => {
+        return chat.id === newMessage.senderId;
+      });
+
+      let existingUnreadChat;
+
+      if (unreadChats.size > 0) {
+        // chequeo si el senderId ya está en el estado de unreadChats
+        existingUnreadChat = unreadChats.has(newMessage.senderId);
+      }
+
+      // si no existe el chat, busco el cliente con el senderId que me llega con el mensaje y lo agrego al estado
+      if (!existingChat) {
+        let response;
+        let user;
+
+        // hago un fetch para obtener el usuario que envia con el senderId
+        response = await fetch(`${baseUrl}/clients/body/${newMessage.senderId}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
         });
         user = await response.json();
-      }      
+        
+        // si no es cliente, busco si es paseador
+        if (!user.body) {
+          response = await fetch(`${baseUrl}/walkers/${newMessage.senderId}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+          user = await response.json();
+        }      
 
-      // agrego el usuario a los estados
-      addChat(user.body);
-      addUnreadChat(user.body.id);
-      // si existe el chat, pero no está en el estado de unreadChats, lo agrego
-    } else if (existingChat && !existingUnreadChat) { 
-      // modifico el estado usersChats para asignarle el ultimo mensaje al chat en el atributo lastMessage
+        // agrego el usuario a los estados
+        addChat(user.body);
+        addUnreadChat(user.body.id);
+        // si existe el chat, pero no está en el estado de unreadChats, lo agrego
+      } else if (existingChat && !existingUnreadChat) { 
+        // modifico el estado usersChats para asignarle el ultimo mensaje al chat en el atributo lastMessage
+        setUsersChats((prevUsersChats) => {
+
+          const updatedUsersChats = [...prevUsersChats]; // Crear una copia de los chats existentes
+          const chatIndex = updatedUsersChats.findIndex((chat) => chat.id === newMessage.senderId);
+          updatedUsersChats[chatIndex].lastMessage = fullMessage;
+          return updatedUsersChats;
+        });
+
+
+        addUnreadChat(newMessage.senderId);
+      }
+    
       setUsersChats((prevUsersChats) => {
-
-        const updatedUsersChats = [...prevUsersChats]; // Crear una copia de los chats existentes
-        const chatIndex = updatedUsersChats.findIndex((chat) => chat.id === newMessage.senderId);
-        updatedUsersChats[chatIndex].lastMessage = fullMessage;
-        return updatedUsersChats;
+        const updatedChats = [...prevUsersChats]; // Crear una copia de los chats existentes
+        const orderedChats = updatedChats.sort((b, a) => new Date(a.lastMessage?.createdAt) - new Date(b.lastMessage?.createdAt));
+        return orderedChats; // Actualiza el estado con los chats ordenados
       });
-
-
-      addUnreadChat(newMessage.senderId);
+    }catch (error) {
+      console.error('Error en handleNewMessage:', error);
     }
-  
-    setUsersChats((prevUsersChats) => {
-      const updatedChats = [...prevUsersChats]; // Crear una copia de los chats existentes
-      const orderedChats = updatedChats.sort((b, a) => new Date(a.lastMessage?.createdAt) - new Date(b.lastMessage?.createdAt));
-      return orderedChats; // Actualiza el estado con los chats ordenados
-    });
   };
-
   // Vinculamos el evento del socket dentro del useEffect
   if (!socket) return;
   socket.on('receiveMessage', handleNewMessage);

@@ -40,8 +40,7 @@ function LoginPage() {
         setErrorMessage(data.message);
       }
     } catch (error) {
-      console.error('Error al iniciar sesión:', error);
-      setErrorMessage('Error al iniciar sesión. Por favor, intenta de nuevo.');
+      setErrorMessage('Error al iniciar sesión. Por favor, intenta mas tarde.');
     }
   };
 

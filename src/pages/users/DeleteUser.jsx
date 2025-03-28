@@ -51,13 +51,12 @@ function DeleteUser({onCancel}) {
         navigate('/')
 
       } else {
-        console.error('Error al eliminar cuenta:', response.statusText);
         const responseData = await response.json()
         setMensaje(responseData.message)
         // Aquí puedes manejar el error de alguna manera, como mostrar un mensaje de error al usuario
       }
     } catch (error) {
-      console.error('Error:', error);
+      setMensaje('Error al eliminar la cuenta, intentalo mas tarde')
     }
   };
 

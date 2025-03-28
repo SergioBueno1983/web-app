@@ -117,7 +117,6 @@ function AddTurnForm({ userLog }) {
       });
 
       if (response.ok) {
-        setMensaje('Turno agregado correctamente');
         getWalkerTurns();
         // Limpiar el formulario después de enviar los datos
         setDias([]);
@@ -128,14 +127,11 @@ function AddTurnForm({ userLog }) {
         alert('Turno agregado correctamente');
         navigate('/turns');
       } else {
-        console.error('Error al agregar el turno:', response.statusText);
         setMensaje('Error al agregar el turno');
-        alert(mensaje);
+
       }
     } catch (error) {
-      console.error('Error:', error);
-      setMensaje('Error al conectar con el servidor');
-      alert(mensaje);
+      setMensaje('Error al conectar con el servidor, intentelo mas tarde ');
     }
   }
 

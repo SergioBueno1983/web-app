@@ -114,11 +114,10 @@ function Register() {
         navigate('/');
       } else {
         const responseData = await response.json();
-        console.error('Error al registrar:', responseData);
         setMensaje(responseData.error);
       }
     } catch (error) {
-      console.error('Error:', error);
+      setMensaje('Error interno vuelva a intentarlo mas tarde');
     }
   };
 

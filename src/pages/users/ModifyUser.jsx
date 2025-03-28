@@ -71,7 +71,7 @@ function ModifyUser() {
         setMensaje(responseData.error);
       }
     } catch (error) {
-      console.error('Error:', error);
+      setMensaje('Error al conectar con el servidor, intentalo mas tarde')
     }
     // Reiniciar el estado del formulario
     setUserData(userLog);

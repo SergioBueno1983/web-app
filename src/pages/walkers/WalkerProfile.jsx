@@ -83,11 +83,10 @@ const WalkerProfile = () => {
               const objectURL = URL.createObjectURL(blob);
               return { imageSrc: objectURL };
             } else {
-              console.error('Error al obtener la imagen del paseador:', imageResponse.statusText);
+              setError('Error al obtener la imagen del paseador:', imageResponse.statusText);
               return { imageSrc: null };
             }
           }));
-
           setImages(images);
         }
       } catch (err) {
